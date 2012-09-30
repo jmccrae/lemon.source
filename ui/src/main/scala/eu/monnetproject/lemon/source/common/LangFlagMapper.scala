@@ -1,0 +1,227 @@
+/**********************************************************************************
+ * Copyright (c) 2011, Monnet Project
+ * All rights reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *     * Redistributions of source code must retain the above copyright
+ *       notice, this list of conditions and the following disclaimer.
+ *     * Redistributions in binary form must reproduce the above copyright
+ *       notice, this list of conditions and the following disclaimer in the
+ *       documentation and/or other materials provided with the distribution.
+ *     * Neither the name of the Monnet Project nor the
+ *       names of its contributors may be used to endorse or promote products
+ *       derived from this software without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE MONNET PROJECT BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *********************************************************************************/
+package eu.monnetproject.lemon.source.common
+
+import eu.monnetproject.lang.Language
+
+/**
+ * Maps language to appropriate country/region flag
+ * @author John McCrae
+ */
+object LangFlagMapper {
+  private val langMap = Map[Language,String](
+      Language.ABKHAZIAN -> "abkhazia"         ,
+      Language.AFAR -> "afar"                   ,
+      Language.AFRIKAANS -> "za"               ,
+      Language.AKAN -> "gh"                    ,
+      Language.ALBANIAN -> "al"                ,
+      Language.AMHARIC -> "et"                 ,
+      Language.ARABIC -> "sa"                  ,
+      Language.ARAGONESE -> "aragon"               ,
+      Language.ASSAMESE -> "assam"                ,
+      Language.ARMENIAN -> "am"                ,
+      Language.AVARIC -> "avar"                  ,
+      Language.AVESTAN -> "ir"                 ,
+      Language.AYMARA -> "aymara"                  ,
+      Language.AZERBAIJANI -> "az"             ,
+      Language.BASHKIR -> "bashkir"                ,
+      Language.BAMBARA -> "ml"                 ,
+      Language.BASQUE -> "basque"                  ,
+      Language.BELARUSIAN -> "by"              ,
+      Language.BENGALI -> "bd"                 ,
+      Language.BIHARI -> "in"                  ,
+      Language.BISLAMA -> "vu"                 ,
+      Language.BOSNIAN -> "ba"                 ,
+      Language.BRETON -> "breton"                  ,
+      Language.BULGARIAN -> "bg"               ,
+      Language.BURMESE -> "mm"                 ,
+      Language.CATALAN -> "catalonia"          ,
+      Language.CHAMORRO -> "gu"                ,
+      Language.CHECHEN -> "chechen"                 ,
+      Language.CHICHEWA -> "mw"                ,
+      Language.CHINESE -> "cn"                 ,
+      Language.CHUVASH -> "chuvash"                 ,
+      Language.CORNISH -> "cornish"                 ,
+      Language.CORSICAN -> "corsican"                ,
+      Language.CREE -> "us"                    ,
+      Language.CROATIAN -> "hr"                ,
+      Language.CZECH -> "cz"                   ,
+      Language.DANISH -> "dk"                  ,
+      Language.DIVEHI -> "mv"                  ,
+      Language.DZONGKHA -> "bt"                ,
+      Language.ENGLISH -> "england"            ,
+      Language.ESPERANTO -> "esperanto"             ,
+      Language.ESTONIAN -> "ee"                ,
+      Language.EWE -> "ewe"                     ,
+      Language.FAROESE -> "fo"                 ,
+      Language.FIJIAN -> "fj"                  ,
+      Language.FINNISH -> "fi"                 ,
+      Language.FRENCH -> "fr"                  ,
+      Language.FULA -> "cm"                    ,
+      Language.GALICIAN -> "galicia"               ,
+      Language.GERMAN -> "de"                  ,
+      Language.GREEK -> "gr"                   ,
+      Language.GUARANI -> "py"                 ,
+      Language.GUJARATI -> "in"                ,
+      Language.HAITIAN -> "ht"                 ,
+      Language.HAUSA -> "cg"                   ,
+      Language.HEBREW -> "il"                  ,
+      Language.HERERO -> "na"                  ,
+      Language.HINDI -> "in"                   ,
+      Language.HIRI_MOTU -> "pg"               ,
+      Language.HUNGARIAN -> "hu"               ,
+      Language.INTERLINGUA -> null             ,
+      Language.INDONESIAN -> "id"              ,
+      Language.INTERLINGUE -> null             ,
+      Language.IRISH -> "ie"                   ,
+      Language.IGBO -> "igbo"                    ,
+      Language.SICHUAN_YI -> "cn"              ,
+      Language.INUPIAQ -> "us"                 ,
+      Language.IDO -> "ido"                     ,
+      Language.ICELANDIC -> "is"               ,
+      Language.ITALIAN -> "it"                 ,
+      Language.INUKTITUT -> "inuktitut"              ,
+      Language.JAPANESE -> "jp"                ,
+      Language.JAVANESE -> "id"                ,
+      Language.GEORGIAN -> "ge"                ,
+      Language.KONGO -> "cg"                   ,
+      Language.KIKUYU -> "ke"                  ,
+      Language.KWANYAMA -> "ao"                ,
+      Language.KAZAKH -> "kz"                  ,
+      Language.KALAALLISUT -> "gl"             ,
+      Language.KHMER -> "kh"                   ,
+      Language.KANNADA -> "kannada"                 ,
+      Language.KOREAN -> "kr"                  ,
+      Language.KANURI -> "ng"                  ,
+      Language.KASHMIRI -> "kashmiri"                ,
+      Language.KURDISH -> "kurdish"                 ,
+      Language.KOMI -> "komi"                    ,
+      Language.KIRGHIZ -> "kg"                 ,
+      Language.LATIN -> "latin"                   ,
+      Language.LUXEMBOURGISH -> "lu"           ,
+      Language.LUGANDA -> "ug"                 ,
+      Language.LIMBURGISH -> "limburgish"              ,
+      Language.LINGALA -> "cg"                 ,
+      Language.LAO -> "la"                     ,
+      Language.LITHUANIAN -> "lt"              ,
+      Language.LUBA_KATANGA -> "luba_katanga"           ,
+      Language.LATVIAN -> "lv"                 ,
+      Language.MALAGASY -> "mg"                ,
+      Language.MARSHALLESE -> "mh"             ,
+      Language.MANX -> "manx"                    ,
+      Language.MAORI -> "nz"                   ,
+      Language.MACEDONIAN -> "me"              ,
+      Language.MALAYALAM -> "in"               ,
+      Language.MONGOLIAN -> "mn"               ,
+      Language.MARATHI -> "marathi"                 ,
+      Language.MALAY -> "my"                   ,
+      Language.MALTESE -> "mt"                 ,
+      Language.NAURU -> "nr"                  ,
+      Language.NORWEGIAN_BOKMAL -> "no"        ,
+      Language.NORTH_NDEBELE -> "zw"           ,
+      Language.NEPALI -> "np"                  ,
+      Language.NDONGA -> "cd"                 ,
+      Language.DUTCH -> "nl"                   ,
+      Language.NORWEGIAN_NYNORSK -> "no"       ,
+      Language.NORWEGIAN -> "no"               ,
+      Language.SOUTH_NDEBELE -> "za"           ,
+      Language.NAVAJO -> "navajo"                  ,
+      Language.OCCITAN -> "occitan"                 ,
+      Language.OJIBWA -> "ojibwa"                  ,
+      Language.OLD_CHURCH_SLAVONIC -> "byzantine"     ,
+      Language.OROMO -> "oromo"                   ,
+      Language.ORIYA -> "in"                   ,
+      Language.OSSETIAN -> "ossetian"                ,
+      Language.PANJABI -> "pk"                 ,
+      Language.PALI -> "pali"                    ,
+      Language.PERSIAN -> "ir"                 ,
+      Language.POLISH -> "pl"                  ,
+      Language.PASHTO -> "af"                  ,
+      Language.PORTUGUESE -> "pt"              ,
+      Language.QUECHUA -> "quechua"                 ,
+      Language.ROMANSH -> "ch"                 ,
+      Language.KIRUNDI -> "bi"                 ,
+      Language.ROMANIAN -> "ro"                ,
+      Language.RUSSIAN -> "ru"                 ,
+      Language.KINYARWANDA -> "rw"             ,
+      Language.SANSKRIT -> "sanskrit"                ,
+      Language.SARDINIAN -> "sardinian"               ,
+      Language.SINDHI -> "sindhi"                  ,
+      Language.NORTHERN_SAMI -> "sami"           ,
+      Language.SAMOAN -> "ws"                  ,
+      Language.SANGO -> "cf"                   ,
+      Language.SERBIAN -> "rs"                 ,
+      Language.SCOTTISH_GAELIC -> "scotland"   ,
+      Language.SHONA -> "zw"                   ,
+      Language.SINHALA -> "lk"                 ,
+      Language.SLOVAK -> "sk"                  ,
+      Language.SLOVENE -> "si"                 ,
+      Language.SOMALI -> "so"                  ,
+      Language.SOUTHERN_SOTHO -> "ls"          ,
+      Language.SPANISH -> "es"                 ,
+      Language.SUNDANESE -> "id"               ,
+      Language.SWAHILI -> "ke"                 ,
+      Language.SWATI -> "sz"                   ,
+      Language.SWEDISH -> "se"                 ,
+      Language.TAMIL -> "tamil"                   ,
+      Language.TELUGU -> "in"                  ,
+      Language.TAJIK -> "tj"                   ,
+      Language.THAI -> "th"                    ,
+      Language.TIGRINYA -> "er"                ,
+      Language.TIBETAN_STANDARD -> "tibetan"        ,
+      Language.TURKMEN -> "tm"                 ,
+      Language.TAGALOG -> "ph"                 ,
+      Language.TSWANA -> "bw"                  ,
+      Language.TONGA -> "to"                   ,
+      Language.TURKISH -> "tr"                 ,
+      Language.TSONGA -> "za"                  ,
+      Language.TATAR -> "tatar"                   ,
+      Language.TWI -> "gh"                     ,
+      Language.TAHITIAN -> "tahiti"                ,
+      Language.UIGHUR -> "uighur"                  ,
+      Language.UKRAINIAN -> "ua"               ,
+      Language.URDU -> "pk"                    ,
+      Language.UZBEK -> "uz"                   ,
+      Language.VENDA -> "venda"                   ,
+      Language.VIETNAMESE -> "vn"              ,
+      Language.VOLAPUK -> "volapuk"                 ,
+      Language.WALLOON -> "walloon"                 ,
+      Language.WELSH -> "wales"                ,
+      Language.WOLOF -> "sn"                   ,
+      Language.WESTERN_FRISIAN -> "frisian"         ,
+      Language.XHOSA -> "za"                   ,
+      Language.YIDDISH -> "il"                 ,
+      Language.YORUBA -> "ng"                  ,
+      Language.ZHUANG -> "cn"                  ,
+      Language.ZULU -> "za")
+  
+  def flagForLang(lang : Language) = {
+      langMap.get(lang)
+  }
+  
+  def languages = langMap.keys
+}
