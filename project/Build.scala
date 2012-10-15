@@ -13,7 +13,8 @@ object LemonSourceBuild extends Build {
   // Settings for all projects
   lazy val sharedSettings = Seq(version in ThisBuild := "1.12.7",
                                 scalaVersion in ThisBuild := "2.9.2",
-                                resolvers in ThisBuild += "Monnet Maven Repository" at "http://monnet01.sindice.net/mvn/")
+                                resolvers in ThisBuild += "Monnet Maven Repository" at "http://monnet01.sindice.net/mvn/",
+                                resolvers in ThisBuild += "Twitter Maven Repository" at "http://maven.twttr.com/")
                                 
   override lazy val settings = super.settings ++ sharedSettings
   

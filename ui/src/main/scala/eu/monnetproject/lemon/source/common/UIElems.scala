@@ -153,6 +153,10 @@ trait UIElems[Component,Container<:Component] {
   
   def autoSuggest[E](caption : LocalizableString, suggester : String => Seq[E], serializer : Serializer[E], defaultValue : Option[E] = None) : FormElem[E]
   
+  def oneOfForm[E](elems : (LocalizableString,FormElem[E])*) : FormElem[E]
+  
+  def multipleElems[E](elem : => FormElem[E]) : FormElem[Seq[E]]
+  
   def formElems[E,F](elem1 : FormElem[E], elem2 : FormElem[F]) : FormElem[(E,F)] 
   
   def formElems[E,F,G](elem1 : FormElem[E], elem2 : FormElem[F], elem3 : FormElem[G]) : FormElem[(E,F,G)] 
@@ -161,7 +165,11 @@ trait UIElems[Component,Container<:Component] {
   def formElems[E,F,G,H](elem1 : FormElem[E], elem2 : FormElem[F], elem3 : FormElem[G], elem4 : FormElem[H]) : FormElem[(E,F,G,H)]
   
   def mapForm[E,F](elem : FormElem[E], function : E => F) : FormElem[F]
- 
+  
+  def mapForm[E,F,G](elem : FormElem[E], elem2 : FormElem[F], function : (E,F) => G) : FormElem[G]
+  
+  def mapForm[E,F,G,H](elem : FormElem[E], elem2: FormElem[F], elem3 : FormElem[G], function : (E,F,G) => H) : FormElem[H]
+  
   def prompt() : AbstractPrompt
   
   /////////////////////////////////////////////////////////////////////////////

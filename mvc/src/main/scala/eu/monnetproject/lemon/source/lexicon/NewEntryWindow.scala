@@ -49,18 +49,40 @@ class NewEntryWindow[C,O<:C](val app : LemonEditorApp, lexiconName : String,
   import UIElems._
   
   def show(after : (LexicalEntry) => Result) : Result = {
-    dialog("Add a new lexical entry", formElems(
-        field("Canonical Form"),
-        field("Sense (optional)", validator=Some(s => URI.create(s) != null))
-      )
-    ) {
+    prompt().show(app, "Use lemon patterns", "Do you want to use lemon patterns?",
+    { 
+      case false => dialog("Add a new lexical entry", formElems(
+                      field("Canonical Form"),
+                      field("Sense (optional)", validator=Some(s => URI.create(s) != null))
+                    ))  {
       case (form,sense) => {
           makeElement(form,sense) match {
             case Some(x) => after(x)
             case None => NoResult
           }
         }
-    }
+      }
+      case true => compoundDialog("Add a new lexical entry using a pattern")(
+         localize("Name") -> mapForm(field("Canonical Form"),field("Sense URI"), { (x:String,y:String) => x+y}),
+         localize("Noun") -> mapForm(field("Canonical Form"),oneOfForm(
+            localize("Class Noun") -> field("Sense URI"),
+            localize("Relational Noun") -> field("Property URI"),
+            localize("Multivariant Relational Noun") -> mapForm(multipleElems(
+               mapForm(field("Property"),field("as"), { (x:String,y:String) => x+y})
+            ), { x : Seq[String] => x.mkString(" ") }),
+            localize("Class+Relational Noun") -> mapForm(field("Class Sense URI"),field("Property Sense URI"),
+                                 { (x:String,y:String) => x+y})
+            ), { (x:String,y:String) => x+y}),
+         localize("Verb") -> field(),
+         localize("Adjective") -> field(),
+         localize("Enter expression") -> field()
+         ) {
+           case s => makeElement(s,s) match {
+             case Some(x) => after(x)
+             case None => NoResult
+           }
+         }
+    })
   }
   
   def wrap(vals : List[String]) = {

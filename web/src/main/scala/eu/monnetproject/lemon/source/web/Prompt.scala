@@ -43,8 +43,8 @@ class Prompt(uielems : WebUIElem) extends AbstractPrompt {
     val tag = <div id={id} class="dialog" title={app.l10n(caption)}>
       <div>{app.l10n(prompt)}</div>
       <div>
-        <button class="dialog_ok lint_ignore" onclick={"callAction('"+id+"','true');doClose('"+id+"');"}>{app.l10n("Yes")}</button>
         <button class="dialog_cancel" onclick={"callAction('"+id+"','false');doClose('"+id+"');"}>{app.l10n("No")}</button>
+        <button class="dialog_ok lint_ignore" onclick={"callAction('"+id+"','true');doClose('"+id+"');"}>{app.l10n("Yes")}</button>
       </div>
               </div>
     app.asInstanceOf[WebLemonEditor].navigator.addHandler(id, Some("true"),{ notify(true) })
@@ -67,8 +67,8 @@ class Prompt(uielems : WebUIElem) extends AbstractPrompt {
     val tag = <div id={id} class="dialog" title={app.l10n("Confirm Deletion")}>
       <div>{app.l10n("Are you sure you want to delete this element? Changes cannot be undone")}</div>
       <div>
-        <button class="dialog_ok lint_ignore" onclick={"call('"+id+"');doClose('"+id+"');"}>{app.l10n("Yes")}</button>
         <button class="dialog_cancel" onclick={"doClose('"+id+"');"}>{app.l10n("No")}</button>
+        <button class="dialog_ok lint_ignore" onclick={"call('"+id+"');doClose('"+id+"');"}>{app.l10n("Yes")}</button>
       </div>
               </div>
     app.asInstanceOf[WebLemonEditor].navigator.addHandler(id, None,{ after() })

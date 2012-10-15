@@ -240,7 +240,7 @@ class WebUIElem(val app : WebLemonEditor) extends UIElems[WebComponent,WebContai
     new LoadDialogResult(l10n(caption),id,tag,widthPx)
   }
   
-  def cleanName(s : LocalizableString) = URLEncoder.encode(s.key,"UTF-8")
+  def cleanName(s : LocalizableString) = URLEncoder.encode(s.key.replaceAll("\\s",""),"UTF-8")
   
   def compoundDialog[E](caption : LocalizableString, widthPx : Int = 600)(panes : (LocalizableString,FormElem[E])*)(action : E => Result) = {
     val id = randId()
@@ -869,6 +869,48 @@ class WebUIElem(val app : WebLemonEditor) extends UIElems[WebComponent,WebContai
     }
   }
   
+  def oneOfForm[E](elems : (LocalizableString,FormElem[E])*) : FormElem[E] = {
+    val id = randId()
+    val ids = (for(elem <- elems) yield { elem._2 -> randId() }).toMap
+    val tag = <span>{
+      for((caption,elem) <- elems) yield {
+        <input type="radio" name={id} onclick={(elems filter (_ != (caption,elem)) map { 
+           e => "$('#"+ids(e._2)+"_frame').addClass('disabled_area')"}).mkString(";") + ";$('#"+ids(elem)+"_frame').removeClass('disabled_area');"}/> :+
+        {l10n(caption)} :+
+        <br/> :+
+        <div id={ids(elem)+"_frame"} class="disabled_area">{
+          for(ec <- elem.components) yield {
+            ec.html
+          }
+        }</div>
+      }
+    }</span>
+    new FormElem[E] with FormElemExtractor[E] {
+      var value : E = null.asInstanceOf[E]
+      def components = List(new SimpleComponent(id,tag))
+      def extract(params : Map[String,String]) = None
+    }
+  }
+  
+  def multipleElems[E](elem : => FormElem[E]) : FormElem[Seq[E]] = {
+     val id = randId()
+     val tag = <span id={id}>
+        <span id={id+"_landing"}/>
+        <br/>
+        <button onclick={"callAction('"+id+"','add');return false;"}>+</button>
+        <button onclick={"callAction('"+id+"','remove');return false;"}>-</button>
+     </span>
+     def addHandler = AppendContents(id+"_landing", for(ec <- elem.components) yield {
+       ec.html
+     })
+     app.navigator.addHandler(id,Some("add"),addHandler)
+     new FormElem[Seq[E]] with FormElemExtractor[Seq[E]] {
+       var value : Seq[E] = Nil
+       def components = List(new SimpleComponent(id,tag))
+       def extract(params : Map[String,String]) = None
+     }
+  }
+  
   def formElems[E,F](elem1 : FormElem[E], elem2 : FormElem[F]) = new FormElem[(E,F)] with FormElemExtractor[(E,F)] {
     var _value : Option[(E,F)] = None
     val compTag = <span>{
@@ -943,6 +985,41 @@ class WebUIElem(val app : WebLemonEditor) extends UIElems[WebComponent,WebContai
       case None => None
     }
   }
+  
+  def mapForm[E,F,G](elem : FormElem[E], elem2 : FormElem[F], function : (E,F) => G) = new FormElem[G] with FormElemExtractor[G] {
+    assert(elem.isInstanceOf[FormElemExtractor[E]])
+    assert(elem2.isInstanceOf[FormElemExtractor[F]])
+    def value = function(elem.value, elem2.value)
+    def components = elem.components ++ elem2.components
+    override def validate = elem.validate && elem2.validate && function(elem.value,elem2.value) != null
+    def extract(params : Map[String,String]) = elem.asInstanceOf[FormElemExtractor[E]].extract(params) match {
+      case Some(e) => elem2.asInstanceOf[FormElemExtractor[F]].extract(params) match {
+        case Some(e2) => Some(function(e,e2))
+        case None => None
+      }
+      case None => None
+    }
+  }
+  
+  def mapForm[E,F,G,H](elem : FormElem[E], elem2: FormElem[F], elem3 : FormElem[G], function : (E,F,G) => H)  = new FormElem[H] with FormElemExtractor[H] {
+    assert(elem.isInstanceOf[FormElemExtractor[E]])
+    assert(elem2.isInstanceOf[FormElemExtractor[F]])
+    assert(elem3.isInstanceOf[FormElemExtractor[G]])
+    def value = function(elem.value, elem2.value, elem3.value)
+    def components = elem.components ++ elem2.components ++ elem3.components
+    override def validate = elem.validate && elem2.validate && elem3.validate && function(elem.value,elem2.value,elem3.value) != null
+    def extract(params : Map[String,String]) = elem.asInstanceOf[FormElemExtractor[E]].extract(params) match {
+      case Some(e) => elem2.asInstanceOf[FormElemExtractor[F]].extract(params) match {
+        case Some(e2) => elem2.asInstanceOf[FormElemExtractor[G]].extract(params) match {
+          case Some(e3) => Some(function(e,e2,e3))
+          case None => None
+        }
+        case None => None
+      }
+      case None => None
+    }
+  }
+  
   lazy val _prompt = new Prompt(this)
   def prompt() = _prompt
   

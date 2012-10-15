@@ -529,3 +529,16 @@ a.entry_link {
 a.entry_link:hover {
     color: blue;
 }
+
+div.disabled_area {
+	color:grey;
+	pointer-events:none;
+	cursor:default;
+}
+
+div.disabled_area * input {
+	color:grey;
+	pointer-events:none;
+	cursor:default;
+}
+	
